@@ -56,15 +56,19 @@ def plugin_app(parent):
     return this.status_frame
 
 def update_view():
-    lines = [ "G{} {} {:3.1f}%".format(l['grade'], l['local'], l['percent']) for l in this._mats.report() ]
+    lines = [ "G{} {} {:3.1f}%".format(l['grade'], l['local'], l['percent']) for l in this._mats.recent() ]
     this.report['text'] = '\n'.join(lines)
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     if entry['event'] == 'Materials':
-        self._mats.snapshot(entry)
+        this._mats.snapshot(entry)
     elif entry['event'] == 'MaterialCollected':
-        self._mats.report( entry['Name'], entry['Name_Localised'], entry['Count'])
+        if 'Name_Localised' in entry:
+            local = entry['Name_Localised']
+        else:
+            local = entry['Name']
+        this._mats.record( entry['Name'], local, entry['Count'])
         update_view()
         
 

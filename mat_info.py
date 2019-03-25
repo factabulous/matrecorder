@@ -62,6 +62,7 @@ class Mats:
         return [ {
             'name': e['name'], 
             'count': e['count'], 
+            'grade': self.grade(e['name']),
             'maximum': self.maximum(e['name']), 
             'now': self._storage[e['name']], 
             'percent': 100 * self._storage[e['name']] / self.maximum(e['name']),
