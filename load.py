@@ -7,7 +7,6 @@ import myNotebook as nb
 from config import config
 import sys
 import plug
-import heading
 import version
 import mat_info
 from sys import platform
