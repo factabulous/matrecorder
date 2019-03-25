@@ -16,6 +16,27 @@ class MatsTest(unittest.TestCase):
         self.assertEqual(100, m.maximum("dataminedwake"))
         self.assertEqual(300, m.maximum("sulphur"))
         self.assertEqual(None, m.maximum("gold"))
+
+    def test_record(self):
+        m = mats.Mats("material_info.json")
+        self.assertEqual(0, len(m.recent()))
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        self.assertEqual(1, len(m.recent()))
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        # Should by default return this many events
+        self.assertEqual(5, len(m.recent()))
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        self.assertEqual(5, len(m.recent()))
+        self.assertEqual(1, len(m.recent(count=1)))
+
+    def test_record_bad_name(self):
+        m = mats.Mats("material_info.json")
+        self.assertEqual(0, len(m.recent()))
+        m.record("gold", "Gold", 3)
+        self.assertEqual(0, len(m.recent()))
        
 
 if __name__ == "__main__":
