@@ -3,7 +3,7 @@
 import json
 
 class Mats:
-    def __init__(self, ref_file_name):
+    def __init__(self, ref_file_name = "material_info.json"):
         """
         ref_file_name is the file location that contains all the reference
         information about materials and grades
@@ -65,5 +65,17 @@ class Mats:
             'maximum': self.maximum(e['name']), 
             'now': self._storage[e['name']], 
             'local': self._localised[e['name']]} for e in events ]
+
+    def snapshot(self, event):
+        """
+        Takes a snapshot of the current material levels from a journal
+        event such as Materials
+        """
+        if 'event' in event and 'Materials' == event['event']:
+            self._storage = {}
+            for k in ['Raw', 'Encoded', 'Manufactured']:
+                if k in event:
+                    for e in event[k]:
+                        self._storage[e['Name']] = e['Count']
         
     
