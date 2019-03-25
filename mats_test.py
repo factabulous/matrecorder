@@ -37,6 +37,18 @@ class MatsTest(unittest.TestCase):
         self.assertEqual(0, len(m.recent()))
         m.record("gold", "Gold", 3)
         self.assertEqual(0, len(m.recent()))
+
+    def test_recent_info(self):
+        m = mats.Mats("material_info.json")
+        self.assertEqual(0, len(m.recent()))
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        info = m.recent(count=1)[0]
+        self.assertEqual(100, info['maximum'])
+        self.assertEqual(3, info['now'])
+        self.assertEqual("Datamined Wake Exception", info['local'])
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        info = m.recent(count=1)[0]
+        self.assertEqual(6, info['now'])
        
 
 if __name__ == "__main__":

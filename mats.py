@@ -9,8 +9,9 @@ class Mats:
         information about materials and grades
         """
 
-        self._localised = {}
-        self._events = []
+        self._localised = {} # name => local name
+        self._events = [] # name / count
+        self._storage = { } # name => count
 
         with open(ref_file_name, "rt") as ref_file:
             self._mats = json.load(ref_file)
@@ -43,6 +44,10 @@ class Mats:
         if self.grade(name):
             self._localised[name] = local_name
             self._events.append( { "name": name, "count": count } )
+            if name in self._storage:
+                self._storage[name] = self._storage[name] + count
+            else:
+                self._storage[name] = count
 
     def recent(self, count = 5):
         """
@@ -54,6 +59,11 @@ class Mats:
         """
         Adds extra fields onto a set of events 
         """
-        return events
+        return [ {
+            'name': e['name'], 
+            'count': e['count'], 
+            'maximum': self.maximum(e['name']), 
+            'now': self._storage[e['name']], 
+            'local': self._localised[e['name']]} for e in events ]
         
     
