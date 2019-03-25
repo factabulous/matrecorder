@@ -1,10 +1,10 @@
 {
 "maximums": { 
- 1: 300,
- 2: 250,
- 3: 200,
- 4: 150,
- 5: 100
+ "1": 300,
+ "2": 250,
+ "3": 200,
+ "4": 150,
+ "5": 100
 },
 "grades":[ 
  { "grade":4, "name":"polonium" },
@@ -143,4 +143,5 @@
  { "grade":5, "name":"guardian_moduleblueprint"},
  { "grade":5, "name":"guardian_vesselblueprint"},
  { "grade":5, "name":"guardian_weaponblueprint"}
-]
+ ]
+}
