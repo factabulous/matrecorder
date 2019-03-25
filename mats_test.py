@@ -49,10 +49,22 @@ class MatsTest(unittest.TestCase):
         info = m.recent(count=1)[0]
         self.assertEqual(100, info['maximum'])
         self.assertEqual(3, info['now'])
+        self.assertEqual(3, info['percent'])
         self.assertEqual("Datamined Wake Exception", info['local'])
         m.record("dataminedwake", "Datamined Wake Exception", 3)
         info = m.recent(count=1)[0]
         self.assertEqual(6, info['now'])
+        self.assertEqual(6, info['percent'])
+
+    def test_percent(self):
+        m = mats.Mats()
+        self.assertEqual(0, len(m.recent()))
+        m.record("sulphur", "Sulphur", 3)
+        info = m.recent(count=1)[0]
+        self.assertEqual(1, info['percent'])
+        m.record("sulphur", "Sulphur", 3)
+        info = m.recent(count=1)[0]
+        self.assertEqual(2, info['percent'])
 
     def test_snapshot(self):
         m = mats.Mats()

@@ -64,6 +64,7 @@ class Mats:
             'count': e['count'], 
             'maximum': self.maximum(e['name']), 
             'now': self._storage[e['name']], 
+            'percent': 100 * self._storage[e['name']] / self.maximum(e['name']),
             'local': self._localised[e['name']]} for e in events ]
 
     def snapshot(self, event):

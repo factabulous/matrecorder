@@ -56,9 +56,16 @@ def plugin_app(parent):
     this.report.grid(row=h.row(),column=h.col(), sticky = tk.W)
     return this.status_frame
 
+def update_view():
+    lines = [ "G{} {} {:3.1f}%".format(l['grade'], l['local'], l['percent']) for l in this._mats.report() ]
+    this.report['text'] = '\n'.join(lines)
+
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
-    pass
-    #this.report['text'] = '\n'.join(this.missions.report(cmdr))
+    if entry['event'] == 'Materials':
+        self._mats.snapshot(entry)
+    elif entry['event'] == 'MaterialCollected':
+        self._mats.report( entry['Name'], entry['Name_Localised'], entry['Count'])
+        update_view()
         
 
