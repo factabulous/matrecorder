@@ -9,6 +9,7 @@ import sys
 import plug
 import heading
 import version
+import mat_info
 from sys import platform
 from util import GridHelper, debug, error
 from ttkHyperlinkLabel import HyperlinkLabel
@@ -26,8 +27,7 @@ def local_file(name):
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), name)
 
 def plugin_start():
-    with open(local_file("material_info.json"), "rt") as mat_file:
-        this.material_info = json.load(mat_file)
+    this._mats = mat_info.Mats(local_file("material_info.json"))
     return "matrecorder"
 
 def plugin_stop():
