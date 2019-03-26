@@ -60,11 +60,18 @@ class Mats:
     def record(self, name, local_name, count = 3):
         """
         Records the finding of a material 'name'. Also gives the localised
-        name and a count of how many
+        name and a count of how many. If the name already exists in the 
+        events then the two will be merged and added at the end
         """
         if self.grade(name):
             self._localised[name] = local_name
-            self._events.append( { "name": name, "count": count } )
+            existing = 0
+            for i in range(0, len(self._events)):
+               if self._events[i]['name'] == name:
+                   existing = self._events[i]['count']
+                   del self._events[i]
+                   break 
+            self._events.append( { "name": name, "count": count + existing } )
             if name in self._storage:
                 self._storage[name] = self._storage[name] + count
             else:

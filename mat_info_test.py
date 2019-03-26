@@ -37,9 +37,9 @@ class MatsTest(unittest.TestCase):
         m.record("dataminedwake", "Datamined Wake Exception", 3)
         m.record("dataminedwake", "Datamined Wake Exception", 3)
         # Should by default return this many events
-        self.assertEqual(5, len(m.recent()))
-        m.record("dataminedwake", "Datamined Wake Exception", 3)
-        self.assertEqual(5, len(m.recent()))
+        self.assertEqual(1, len(m.recent()))
+        m.record("sulphur", "sulphur", 3)
+        self.assertEqual(2, len(m.recent()))
         self.assertEqual(1, len(m.recent(count=1)))
 
     def test_record_bad_name(self):
@@ -61,6 +61,7 @@ class MatsTest(unittest.TestCase):
         info = m.recent(count=1)[0]
         self.assertEqual(6, info['now'])
         self.assertEqual(6, info['percent'])
+        self.assertEqual(6, info['count'])
 
     def test_percent(self):
         m = mat_info.Mats()
