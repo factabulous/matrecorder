@@ -62,7 +62,7 @@ def summary():
 def update_view():
     if this._mats.has_events():
         lines = [ "G{} {} ({}) {}/{} {:2.0f}%".format(l['grade'], l['local'], l['count'], l['now'], l['maximum'], l['percent']) for l in this._mats.recent() ]
-        this.report['text'] = '\n'.join(summary() + '\n' + lines)
+        this.report['text'] = summary() + '\n' + '\n'.join(lines)
     else:
         this.report['text'] = 'Nothing collected'
 
@@ -76,7 +76,7 @@ def record_from_dict(info, take = False):
         local = info['Name_Localised']
     else:
         local = info['Name']
-    return _mats.record( entry['Name'], local, entry['Count'] * ( -1 if take else 1))
+    return _mats.record( info['Name'], local, info['Count'] * ( -1 if take else 1))
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
@@ -89,17 +89,21 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     if event == 'EngineerCraft':
         for e in entry['Ingredients']:
             record_from_dict(e, take=True)
+        update_view()
     if event == 'MaterialTrade':
         record_from_dict(entry['Received'])
         record_from_dict(entry['Paid'], take=True)
-    if event == 'MissionCompleted'
+        update_view()
+    if event == 'MissionCompleted':
         if 'MaterialsReward' in entry:
             for e in entry['MaterialsReward']:
                 record_from_dict(e)
+        update_view()
     if event == 'Synthesis':
         if 'Materials' in entry:
             for e in entry['Materials']:
                 record_from_dict(e, take=True)
+        update_view()
     if entry['event'] in [ 'Interdicted', 'SupercruiseExit', 'USSDrop']:
         this._mats.reset()
         update_view()
