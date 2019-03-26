@@ -16,6 +16,13 @@ class Mats:
         with open(ref_file_name, "rt") as ref_file:
             self._mats = json.load(ref_file)
 
+    def reset(self):
+        """
+        Remove all events. Doesn't affect storage or localised stores
+        as these are expected to still be useful.
+        """
+        self._events = []
+
     def has_events(self):
         """
         Returns True if there are events recorded

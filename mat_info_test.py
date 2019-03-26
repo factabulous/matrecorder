@@ -26,6 +26,8 @@ class MatsTest(unittest.TestCase):
         self.assertFalse(m.has_events())
         m.record("dataminedwake", "Datamined Wake Exception", 3)
         self.assertTrue(m.has_events())
+        m.reset()
+        self.assertFalse(m.has_events())
 
     def test_record(self):
         m = mat_info.Mats()
