@@ -66,17 +66,18 @@ def update_view():
     else:
         this.report['text'] = 'Nothing collected'
 
-def record_from_dict(info, take = False):
+def record_from_dict(info, take = False, name="Name", count="Count"):
     """
     Not all events have a localised name. If 'take' is set True
     the the counts are flipped as they are removing from available
-    mats
+    mats. You can override the fields used for when fdev use different names...
     """
-    if 'Name_Localised' in info:
-        local = info['Name_Localised']
+    localised_key = name + '_Localised'
+    if localised_key in info:
+        local = info[localised_key]
     else:
-        local = info['Name']
-    return _mats.record( info['Name'], local, info['Count'] * ( -1 if take else 1))
+        local = info[name]
+    return _mats.record( info[name], local, info[count] * ( -1 if take else 1))
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
@@ -91,8 +92,8 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             record_from_dict(e, take=True)
         update_view()
     if event == 'MaterialTrade':
-        record_from_dict(entry['Received'])
-        record_from_dict(entry['Paid'], take=True)
+        record_from_dict(entry['Received'], name="Material", count="Quantity")
+        record_from_dict(entry['Paid'], take=True, name="Material", count="Quantity")
         update_view()
     if event == 'MissionCompleted':
         if 'MaterialsReward' in entry:
