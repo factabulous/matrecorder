@@ -16,6 +16,27 @@ class Mats:
         with open(ref_file_name, "rt") as ref_file:
             self._mats = json.load(ref_file)
 
+    def has_events(self):
+        """
+        Returns True if there are events recorded
+        """
+        return len(self._events) > 0
+
+    def grade_counts(self):
+        """
+        Returns an array of tuples containing grade counts and 
+        number of mats found. Grades are ordered from low to high
+        """
+        res = []
+        for grade_ in range(1, 6):
+            c = 0
+            for e in self._events:
+                if self.grade(e['name']) == grade_:
+                    c = c + e['count']
+            if c:
+                res.append( ( grade_, c) )
+        return res
+
     def grade(self, material_name):
         """
         Returns the grade (1-5) for a material name - may be None if we

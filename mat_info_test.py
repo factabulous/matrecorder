@@ -21,6 +21,12 @@ class MatsTest(unittest.TestCase):
         self.assertEqual(300, m.maximum("sulphur"))
         self.assertEqual(None, m.maximum("gold"))
 
+    def test_has_events(self):
+        m = mat_info.Mats()
+        self.assertFalse(m.has_events())
+        m.record("dataminedwake", "Datamined Wake Exception", 3)
+        self.assertTrue(m.has_events())
+
     def test_record(self):
         m = mat_info.Mats()
         self.assertEqual(0, len(m.recent()))
@@ -72,6 +78,11 @@ class MatsTest(unittest.TestCase):
         m.record("manganese", "Manganese", 3)
         info = m.recent(count=1)[0]
         self.assertEqual(17, info['now'])
+
+    def test_grade_count(self):
+        m = mat_info.Mats()
+        m.record("sulphur", "Sulphur", 3)
+        self.assertEqual( [ ( 1, 3) ], m.grade_counts())
        
 
 if __name__ == "__main__":

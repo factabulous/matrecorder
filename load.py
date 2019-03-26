@@ -55,9 +55,16 @@ def plugin_app(parent):
     this.report.grid(row=h.row(),column=h.col(), sticky = tk.W)
     return this.status_frame
 
+def summary():
+    return " ".join("G{}:{}".format(x[0], x[1]) for x in this._mats.grade_counts())
+        
+
 def update_view():
-    lines = [ "G{} {} {:3.1f}%".format(l['grade'], l['local'], l['percent']) for l in this._mats.recent() ]
-    this.report['text'] = '\n'.join(lines)
+    if this._mats.has_events():
+        lines = [ "G{} {} ({}) {}/{} {:2.0f}%".format(l['grade'], l['local'], l['count'], l['now'], l['maximum'], l['percent']) for l in this._mats.recent() ]
+        this.report['text'] = '\n'.join(summary() + '\n' + lines)
+    else:
+        this.report['text'] = 'Nothing collected'
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
