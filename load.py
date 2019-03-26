@@ -66,19 +66,40 @@ def update_view():
     else:
         this.report['text'] = 'Nothing collected'
 
+def record_from_dict(info, take = False):
+    """
+    Not all events have a localised name. If 'take' is set True
+    the the counts are flipped as they are removing from available
+    mats
+    """
+    if 'Name_Localised' in info:
+        local = info['Name_Localised']
+    else:
+        local = info['Name']
+    return _mats.record( entry['Name'], local, entry['Count'] * ( -1 if take else 1))
+
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
-    if entry['event'] == 'Materials':
+    event = entry['event']
+    if event == 'Materials':
         this._mats.snapshot(entry)
-    if entry['event'] == 'MaterialCollected':
-        if 'Name_Localised' in entry:
-            local = entry['Name_Localised']
-        else:
-            local = entry['Name']
-        this._mats.record( entry['Name'], local, entry['Count'])
+    if event == 'MaterialCollected':
+        record_from_dict(entry)
         update_view()
-    if entry['EngineerCraft', 'MaterialTrade', 'MissionCompleted', 'Synthesis']:
-        pass
+    if event == 'EngineerCraft':
+        for e in entry['Ingredients']:
+            record_from_dict(e, take=True)
+    if event == 'MaterialTrade':
+        record_from_dict(entry['Received'])
+        record_from_dict(entry['Paid'], take=True)
+    if event == 'MissionCompleted'
+        if 'MaterialsReward' in entry:
+            for e in entry['MaterialsReward']:
+                record_from_dict(e)
+    if event == 'Synthesis':
+        if 'Materials' in entry:
+            for e in entry['Materials']:
+                record_from_dict(e, take=True)
     if entry['event'] in [ 'Interdicted', 'SupercruiseExit', 'USSDrop']:
         this._mats.reset()
         update_view()
