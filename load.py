@@ -70,12 +70,17 @@ def update_view():
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     if entry['event'] == 'Materials':
         this._mats.snapshot(entry)
-    elif entry['event'] == 'MaterialCollected':
+    if entry['event'] == 'MaterialCollected':
         if 'Name_Localised' in entry:
             local = entry['Name_Localised']
         else:
             local = entry['Name']
         this._mats.record( entry['Name'], local, entry['Count'])
+        update_view()
+    if entry['EngineerCraft', 'MaterialTrade', 'MissionCompleted', 'Synthesis']:
+        pass
+    if entry['event'] in [ 'Interdicted', 'SupercruiseExit', 'USSDrop']:
+        this._mats.reset()
         update_view()
         
 
